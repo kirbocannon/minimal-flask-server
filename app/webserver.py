@@ -39,6 +39,10 @@ def load_inventory():
     verify_file = read_yaml_file(VERIFICATION_FILEPATH)
     inventory = verify_file.get('hosts', [])
 
+    for hostname, details in inventory.items():
+        details['vpc'] = '-'
+        details['connections'] = '-'
+
     return inventory
 
 

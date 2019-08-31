@@ -1,9 +1,12 @@
-#verify-btn-col {
-    text-align: center;
-}
+/*#verify-btn-col {*/
+/*    text-align: left;*/
+/*}*/
 
+.btn-verify {
+    margin-bottom: 15px;
+}
 .table-host-status {
-    text-align: center;
+    text-align: left;
 }
 
 .card {

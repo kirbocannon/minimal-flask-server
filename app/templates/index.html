@@ -8,49 +8,66 @@
 
   <div class="row">
     <div class="col-xl-12" id="verify-btn-col">
-        <div class="row">
-          <div class="col-sm-6">
-            <div class="card">
-              <div class="card-body">
-                <button type="button" class="btn btn-primary"><i class="fa fa-check"></i>Verify VPC</button>
-                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6">
-            <div class="card">
-              <div class="card-body">
-                  <button type="button" class="btn btn-primary"><i class="fa fa-network-wired"></i>Check Connections</button>
-                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-              </div>
-            </div>
-          </div>
-        </div>
+<!--        <div class="row">-->
+<!--          <button type="button" class="btn btn-primary"><i class="fa fa-check"></i>Verify VPC</button>-->
+<!--          <button type="button" class="btn btn-primary"><i class="fa fa-network-wired"></i>Check Connections</button>-->
+
+
+<!--          <div class="col-sm-6">-->
+<!--            <div class="card">-->
+<!--              <div class="card-body">-->
+<!--                <button type="button" class="btn btn-primary"><i class="fa fa-check"></i>Verify VPC</button>-->
+<!--                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="col-sm-6">-->
+<!--            <div class="card">-->
+<!--              <div class="card-body">-->
+<!--                  <button type="button" class="btn btn-primary"><i class="fa fa-network-wired"></i>Check Connections</button>-->
+<!--                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
     </div>
 <!--        <i class="fa fa-check" style="font-size:48px;"></i>-->
 <!--        <i class="fa fa-times" style="font-size:48px;"></i>-->
   </div>
+
 <div class="row">
-    <table class="table table-hover table-host-status">
-  <thead>
-    <tr>
-      <th scope="col">Hostname</th>
-      <th scope="col">Management IP</th>
-      <th scope="col">VPC</th>
-      <th scope="col">Connections</th>
-    </tr>
-  </thead>
-  <tbody>
-  {% for hostname, details in inventory.items() %}
-      <tr>
-        <th scope="row">{{ hostname }}</th>
-        <td>{{ details['mgmt_ip'] }}</td>
-        <td></td>
-        <td></td>
-      </tr>
-  {% endfor %}
-  </tbody>
-</table>
- </div>
+
+    <div class="col-xl-12">
+      <button type="button" class="btn btn-primary btn-verify"><i class="fa fa-check"></i>Verify VPC</button>
+      <button type="button" class="btn btn-primary btn-verify"><i class="fa fa-network-wired"></i>Check Connections</button>
+
+    <div class="card">
+    <div class="card-body">
+
+        <table class="table table-hover table-host-status">
+          <thead>
+            <tr>
+              <th scope="col">Hostname</th>
+              <th scope="col">Management IP</th>
+              <th scope="col">VPC</th>
+              <th scope="col">Connections</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for hostname, details in inventory.items() %}
+              <tr>
+                <th scope="row">{{ hostname }}</th>
+                <td>{{ details['mgmt_ip'] }}</td>
+                <td>{{ details['vpc'] }}</td>
+                <td>{{ details['connections'] }}</td>
+              </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+    </div>
+    </div>
+    </div>
+
+</div>
 
 {% endblock content %}
