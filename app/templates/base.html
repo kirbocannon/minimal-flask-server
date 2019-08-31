@@ -3,20 +3,21 @@
 {% block head %}
 <head>
     <link href="{{ url_for('static', filename='css/bootstrap/bootstrap.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/base.css') }}" rel="stylesheet">
     <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/jquery-3.3.1.slim.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap/bootstrap.js') }}"></script>
+    <link href="{{ url_for('static', filename='css/font-awesome/all.min.css') }}" rel="stylesheet">
+    {% block scripts %} {% endblock scripts %}
 </head>
 {% endblock head %}
 
 {% block body %}
 <body>
-
-{% block content %}{% endblock content %}
-
+    <div class="container" id="mainContainer">
+        {% block content %}{% endblock content %}
+        {% block footer %}<footer></footer>{%  endblock footer %}
+    </div>
 </body>
 {% endblock body %}
 
-{% block footer %}
-<footer></footer>
-{%  endblock footer %}
