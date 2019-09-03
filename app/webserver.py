@@ -1,7 +1,10 @@
-import os
+import json
 import yaml
 import app.config as config
-from flask import Flask, render_template
+from flask import Flask, render_template, \
+    jsonify, Response
+from app.mock_results import lldp_results, \
+    vpc_results, interfaces_results
 
 
 app = Flask(__name__)
@@ -13,6 +16,7 @@ VERIFICATION_FILEPATH = '../lab_files/verification.yaml'
 @app.route('/home')
 def home():
     inventory = load_inventory()
+    print(lldp_results)
 
     return render_template('index.html', inventory=inventory)
 
@@ -44,6 +48,17 @@ def load_inventory():
         details['connections'] = '-'
 
     return inventory
+
+
+@app.route('/api/check-health', methods=['GET'])
+def check_health():
+    data = {
+        'lldp_results': lldp_results,
+        'interfaces_results': interfaces_results,
+        'vpc_results': vpc_results
+    }
+
+    return jsonify(data)
 
 
 if __name__ == '__main__':
