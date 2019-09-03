@@ -12,7 +12,7 @@ function updateStatus() {
     const checkHealthBtn = document.getElementById('checkHealthBtn')
     checkHealthBtn.disabled = true;
     checkHealthBtn.innerHTML = '<i class="fa fa-heart"></i>Loading...'
-    checkHealthBtn.innerHTML += '<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true">'
+    checkHealthBtn.innerHTML += '&nbsp;&nbsp;<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true">'
     checkHealth().then(function (results) {
         for (const [hostname, details] of Object.entries(results)) {
             if (details.status === 'ERROR') {
