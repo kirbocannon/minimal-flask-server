@@ -2,7 +2,7 @@ import json
 import yaml
 import app.config as config
 from flask import Flask, render_template, \
-    jsonify, Response
+    jsonify
 from app.mock_results import lldp_results, \
     vpc_results, interfaces_results
 
@@ -11,12 +11,12 @@ app = Flask(__name__)
 
 VERIFICATION_FILEPATH = '../lab_files/verification.yaml'
 
+
 @app.route('/')
 @app.route('/index')
 @app.route('/home')
 def home():
     inventory = load_inventory()
-    print(lldp_results)
 
     return render_template('index.html', inventory=inventory)
 
@@ -41,24 +41,66 @@ def read_yaml_file(filepath):
 
 def load_inventory():
     verify_file = read_yaml_file(VERIFICATION_FILEPATH)
-    inventory = verify_file.get('hosts', [])
+    inventory = verify_file.get('hosts', {})
 
     for hostname, details in inventory.items():
-        details['vpc'] = '-'
-        details['connections'] = '-'
+        details['status'] = '-'
 
     return inventory
 
 
+# @app.route('/api/inventory', methods=['GET'])
+# def get_inventory():
+#     verify_file = read_yaml_file(VERIFICATION_FILEPATH)
+#     inventory = []
+#     for hostname, details in verify_file.get('hosts', {}).items():
+#         inventory.append(hostname)
+#
+#     return jsonify(inventory)
+
+
 @app.route('/api/check-health', methods=['GET'])
 def check_health():
+    hostnames = []
     data = {
         'lldp_results': lldp_results,
         'interfaces_results': interfaces_results,
         'vpc_results': vpc_results
     }
+    status_results = {}
 
-    return jsonify(data)
+    # get list of inventory hostnames
+    for hostname, details in load_inventory().items():
+        hostnames.append(hostname)
+
+    for ohostname in hostnames:
+        status_results[ohostname] = {}
+        hostname = ohostname.upper()
+        for entry in data['lldp_results']:
+            if hostname == entry['hostname'].upper():
+                if entry['status'] == 'ERROR':
+                    status_results[ohostname].update({'status': 'ERROR'})
+
+        for entry in data['interfaces_results']:
+            if hostname == entry['hostname'].upper():
+                if entry['status'] == 'ERROR':
+                    if status_results[ohostname].get('status', '') != 'ERROR':
+                        status_results[ohostname].update({'status': 'ERROR'})
+
+        for entry in data['vpc_results']:
+            if hostname == entry['hostname'].upper():
+                if entry['status'] == 'ERROR':
+                    if status_results[ohostname].get('status', '') != 'ERROR':
+                        status_results[ohostname].update({'status': 'ERROR'})
+
+        if status_results[ohostname].get('status', '') != 'ERROR':
+            status_results[ohostname].update({'status': 'OK'})
+
+    print(json.dumps(data, indent=4))
+    print(json.dumps(status_results, indent=4))
+
+    #return jsonify(data)
+    return jsonify(status_results)
 
 
 if __name__ == '__main__':
@@ -67,7 +109,6 @@ if __name__ == '__main__':
 
     if mode == 'development':
         app.config.from_object(config.Development)
-        app.run()
     elif mode == 'production':
         app.config.from_object(config.Production)
-        app.run()
+    app.run()
