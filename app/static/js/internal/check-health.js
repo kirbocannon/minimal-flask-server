@@ -18,6 +18,7 @@ function updateStatus() {
             if (details.status === 'ERROR') {
                 document.getElementById(hostname + "-status-entry").innerHTML = '<i class="fa fa-times"></i>'
                 const modalBody = document.getElementById( hostname + 'ModalBody');
+                modalBody.innerHTML = ''
                 details.errors.forEach(function(error) {
                     modalBody.innerHTML += '--> ' + error + '<br />'
                 });

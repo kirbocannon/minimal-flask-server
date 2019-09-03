@@ -62,8 +62,7 @@ def load_inventory():
 @app.route('/api/check-health', methods=['GET'])
 def check_health():
     import time
-    time.sleep(5)
-    print('running...')
+    time.sleep(2)
     hostnames = []
     data = {
         'lldp_results': lldp_results,
