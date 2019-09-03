@@ -9,17 +9,20 @@
 .fa {
     padding-right: 6px;
 }
-/*.fa-check {*/
-/*    color: green;*/
-/*}*/
 
 .fa-times {
     color: red;
 }
 
+.fa-check {
+    color: green;
+}
+
+.fa-info-circle {
+    color: gray;
+}
+
 body {
-    /*background-color: #343944;*/
-    /*background-color: #F9F7F5;*/
     background-color: #E8E6E4;
 }
 
@@ -37,7 +40,15 @@ body {
     color: #95aaee;
 }
 
+.btn-primary:disabled {
+    background-color: gray;
+}
+
 .btn,
 .card {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.10), 0 6px 20px 0 rgba(0, 0, 0, 0.40);
+}
+
+.spinner-grow {
+    margin-left: 3px;
 }

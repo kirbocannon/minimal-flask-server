@@ -9,14 +9,27 @@ const checkHealth = async () => {
 };
 
 function updateStatus() {
-    //const statusTable = document.getElementById('statusTable');
+    const checkHealthBtn = document.getElementById('checkHealthBtn')
+    checkHealthBtn.disabled = true;
+    checkHealthBtn.innerHTML = '<i class="fa fa-heart"></i>Loading...'
+    checkHealthBtn.innerHTML += '<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true">'
     checkHealth().then(function (results) {
-        for (const [key, value] of Object.entries(results)) {
-            if (value.status === 'ERROR') {
-                document.getElementById(key + "-status-entry").innerHTML = '<i class="fa fa-times"></i>'
-            } else if (value.status === 'OK') {
-                document.getElementById(key + "-status-entry").innerHTML = '<i class="fa fa-check"></i>'
+        for (const [hostname, details] of Object.entries(results)) {
+            if (details.status === 'ERROR') {
+                document.getElementById(hostname + "-status-entry").innerHTML = '<i class="fa fa-times"></i>'
+                const modalBody = document.getElementById( hostname + 'ModalBody');
+                details.errors.forEach(function(error) {
+                    modalBody.innerHTML += '--> ' + error + '<br />'
+                });
+            } else if (details.status === 'OK') {
+                document.getElementById(hostname + "-status-entry").innerHTML = '<i class="fa fa-check"></i>'
             }
         }
+        checkHealthBtn.disabled = false;
+        checkHealthBtn.innerHTML = '<i class="fa fa-heart"></i>Check Health'
     })
+}
+
+function openDetailsModal(hostname) {
+    $('#' + hostname + 'Modal').modal('show')
 }

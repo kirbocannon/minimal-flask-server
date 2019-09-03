@@ -61,6 +61,9 @@ def load_inventory():
 
 @app.route('/api/check-health', methods=['GET'])
 def check_health():
+    import time
+    time.sleep(5)
+    print('running...')
     hostnames = []
     data = {
         'lldp_results': lldp_results,
@@ -71,33 +74,35 @@ def check_health():
 
     # get list of inventory hostnames
     for hostname, details in load_inventory().items():
-        hostnames.append(hostname)
+        if hostname not in hostnames:
+            hostnames.append(hostname)
 
     for ohostname in hostnames:
-        status_results[ohostname] = {}
+        status_results[ohostname] = {'status': '', 'errors': []}
         hostname = ohostname.upper()
         for entry in data['lldp_results']:
             if hostname == entry['hostname'].upper():
                 if entry['status'] == 'ERROR':
-                    status_results[ohostname].update({'status': 'ERROR'})
+                    status_results[ohostname]['status'] = 'ERROR'
+                    status_results[ohostname]['errors'].extend(entry['errors'])
 
         for entry in data['interfaces_results']:
             if hostname == entry['hostname'].upper():
                 if entry['status'] == 'ERROR':
-                    if status_results[ohostname].get('status', '') != 'ERROR':
-                        status_results[ohostname].update({'status': 'ERROR'})
+                    status_results[ohostname]['status'] = 'ERROR'
+                    status_results[ohostname]['errors'].extend(entry['errors'])
 
         for entry in data['vpc_results']:
             if hostname == entry['hostname'].upper():
                 if entry['status'] == 'ERROR':
-                    if status_results[ohostname].get('status', '') != 'ERROR':
-                        status_results[ohostname].update({'status': 'ERROR'})
+                    status_results[ohostname]['status'] = 'ERROR'
+                    status_results[ohostname]['errors'].extend(entry['errors'])
 
-        if status_results[ohostname].get('status', '') != 'ERROR':
-            status_results[ohostname].update({'status': 'OK'})
+        if status_results[ohostname]['status'] != 'ERROR':
+            status_results[ohostname]['status'] = 'OK'
 
-    print(json.dumps(data, indent=4))
-    print(json.dumps(status_results, indent=4))
+    #print(json.dumps(data, indent=4))
+    # print(json.dumps(status_results, indent=4))
 
     #return jsonify(data)
     return jsonify(status_results)
