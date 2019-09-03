@@ -1,0 +1,154 @@
+---
+
+hosts:
+  N7K-A-Pod6:
+    mgmt_ip: 192.168.10.165
+  N7K-B-Pod6:
+    mgmt_ip: 192.168.10.166
+#  N5K-A-Pod6:
+#    mgmt_ip: 192.168.16.6
+#  N5K-B-Pod6:
+#    mgmt_ip: 192.168.16.7
+
+vlans:
+  246:
+    name: SRV_VLAN
+
+interfaces:
+  N7K-A-Pod6:
+    Eth4/13:
+      description: Connects To N5K-A-Pod6 Eth 1/1
+      mode: trunk
+      shutdown: false
+    Eth4/14:
+      description: Connects To N5K-B-Pod6 Eth 1/1
+      mode: trunk
+      shutdown: false
+    Eth4/9:
+      description: Connects to N7K-B-Pod6 Eth 4/9
+      shutdown: false
+    Eth4/10:
+      description: Connects to N7K-B-Pod6 Eth 4/10
+      shutdown: false
+    port-channel20:
+      description: vPC peerlink to N7K-B-Pod6
+      peer-link: true
+      members:
+        - Eth4/9
+        - Eth4/10
+      mode: trunk
+      speed: 10000
+      shutdown: false
+    Vlan246:
+      description:
+      ip_address: 10.55.246.11
+      cidr: 24
+      glbp:
+        group: 1
+        ip: 10.55.246.100
+      vrf: default
+      shutdown: false
+  N7K-B-Pod6:
+    Eth4/13:
+      description: Connects To N5K-A-Pod6 Eth 1/2
+      mode: trunk
+      shutdown: false
+    Eth4/14:
+      description: Connects To N5K-B-Pod6 Eth 1/2
+      mode: trunk
+      shutdown: false
+    Eth4/9:
+      description: Connects to N7K-A-Pod6 Eth 4/9
+      shutdown: false
+    Eth4/10:
+      description: Connects to N7K-A-Pod6 Eth 4/10
+      shutdown: false
+    port-channel20:
+      description: vPC peerlink to N7K-A-Pod6
+      peer-link: true
+      members:
+        - Eth4/9
+        - Eth4/10
+      mode: trunk
+      speed: 10000
+      shutdown: false
+    Vlan246:
+      description:
+      ip_address: 10.55.246.12
+      cidr: 24
+      glbp:
+        group: 1
+        ip: 10.55.246.100
+      vrf: default
+      shutdown: false
+  N5K-A-Pod6:
+      Eth1/1:
+        description: Connects to N7K-A-Pod6 E4/13
+        mode: trunk
+        shutdown: false
+      Eth1/2:
+        description: Connects to N7K-B-Pod6 E4/13
+        mode: trunk
+        shutdown: false
+      Eth1/3:
+        description: Connects to N5K-B-Pod6 E1/3
+        mode: trunk
+        shutdown: false
+      Eth1/4:
+        description: Connects to N5K-B-Pod6 E1/4
+        mode: trunk
+        shutdown: false
+      port-channel20:
+        description: vPC peerlink to N5K-A-Pod6
+        peer-link: true
+        members:
+          - Eth1/3
+          - Eth1/4
+        mode: trunk
+        speed: 10000
+        shutdown: false
+  N5K-B-Pod6:
+      Eth1/1:
+        description: Connects to N7K-A-Pod6 E4/14
+        mode: trunk
+        shutdown: false
+      Eth1/2:
+        description: Connects to N7K-B-Pod6 E4/14
+        mode: trunk
+        shutdown: false
+      Eth1/3:
+        description: Connects to N5K-A-Pod6 E1/3
+        mode: trunk
+        shutdown: false
+      Eth1/4:
+        description: Connects to N5K-A-Pod6 E1/4
+        mode: trunk
+        shutdown: false
+      port-channel20:
+        description: vPC peerlink to N5K-B-Pod6
+        peer-link: true
+        members:
+          - Eth1/3
+          - Eth1/4
+        mode: trunk
+        speed: 10000
+        shutdown: false
+
+vpc_peers:
+  - side_a: N7K-A-Pod6
+    side_b: N7K-B-Pod6
+    domain_id: 1
+    peerlink_interface: 20
+    system_priority: 4000
+    vrf: management
+  - side_a: N5K-A-Pod6
+    side_b: N5K-B-Pod6
+    domain_id: 2
+    peerlink_interface: 20
+    system_priority: 4000
+    vrf: management
+
+
+
+
+

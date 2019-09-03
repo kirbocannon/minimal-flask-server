@@ -1,0 +1,61 @@
+feature vpc
+feature lacp
+feature nxapi
+feature glbp
+
+nxapi sandbox
+nxapi http port 80
+nxapi https port 443
+
+vpc domain {{ domain_id }}
+  peer-keepalive destination {{ peer_mgmt_ip }} source {{ mgmt_ip }} vrf {{ vrf }}
+  system-priority {{ system_priority }}
+  role priority {{ role_priority }}
+
+{% for id, details in vlans.items() %}
+vlan {{ id }}
+  name {{ details['name'] }}
+
+{% endfor %}
+{% for name, details in interfaces.items() %}
+interface {{ name }}
+  {% if details['description'] is defined  and details['description'] %}
+    description {{ details['description'] }}
+  {% endif %}
+  {% if details['mode'] is defined %}
+    switchport mode {{ details['mode'] }}
+  {% endif %}
+  {% if details['speed'] is defined %}
+    speed {{ details['speed'] }}
+  {% endif %}
+  {% if details['ip_address'] is defined  and details['cidr'] is defined %}
+    ip address {{ details['ip_address'] }}/{{ details['cidr'] }}
+  {% endif %}
+  {% if details['glbp'] is defined %}
+    glbp {{ details['glbp']['group'] }}
+      ip {{ details['glbp']['ip'] }}
+      preempt
+  {% endif %}
+  {% if details['vrf'] is defined and details['vrf']| upper != 'DEFAULT' %}
+    vrf member {{ details['vrf'] }}
+  {% endif %}
+  {% if details['shutdown'] is defined and details['shutdown'] == True %}
+    shutdown
+  {% elif details['shutdown'] is defined and details['shutdown'] == False %}
+    no shutdown
+  {% endif %}
+
+{% endfor %}
+{% if vpc_peer_link_po_num is defined %}
+! VPC Port Configuration
+interface port-channel{{ vpc_peer_link_po_num }}
+  spanning-tree port type network
+  vpc peer-link
+
+{% for member in vpc_peer_link_po_members %}
+interface {{ member }}
+  channel-group {{ vpc_peer_link_po_num }} mode active
+
+{% endfor %}
+{% endif %}
+
