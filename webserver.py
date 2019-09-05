@@ -1,3 +1,4 @@
+import os
 import json
 import yaml
 import app.config as config
@@ -8,8 +9,9 @@ from app.mock_results import lldp_results, \
 
 
 app = Flask(__name__)
+BASEDIR = os.path.dirname(os.path.realpath(__file__))
 
-VERIFICATION_FILEPATH = '../lab_files/verification.yaml'
+VERIFICATION_FILEPATH = os.path.join(BASEDIR, 'lab_files', 'verification.yaml')
 
 
 @app.route('/')
@@ -62,7 +64,7 @@ def load_inventory():
 @app.route('/api/check-health', methods=['GET'])
 def check_health():
     import time
-    time.sleep(2)
+    time.sleep(5)
     hostnames = []
     data = {
         'lldp_results': lldp_results,
@@ -103,7 +105,6 @@ def check_health():
     #print(json.dumps(data, indent=4))
     # print(json.dumps(status_results, indent=4))
 
-    #return jsonify(data)
     return jsonify(status_results)
 
 

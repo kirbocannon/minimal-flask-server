@@ -9,7 +9,7 @@ from requests.packages.urllib3.exceptions import InsecureRequestWarning
 # disable any ssl insecure warnings
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
-CREDENTIALS = ("admin", "1234QWer")
+CREDENTIALS = ("USERNAME", "PASSWORD")
 
 
 def read_yaml_file(filepath):
@@ -51,29 +51,26 @@ def nxapi_send_config_cmds(host, cmds):
     url = f"http://{host}/ins"
 
     # convert command list into one string with each command separated by ` ;`
-    cmds = ' ;'.join(cmds)
+    cmds = " ;".join(cmds)
 
     # specify type and command and output type to json
     payload = {
-      "ins_api": {
-        "version": "1.2",
-        "type": "cli_conf",
-        "chunk": "0",
-        "sid": "1",
-        "input": cmds,
-        "output_format": "json"
-      }
+        "ins_api": {
+            "version": "1.2",
+            "type": "cli_conf",
+            "chunk": "0",
+            "sid": "1",
+            "input": cmds,
+            "output_format": "json",
+        }
     }
 
     print(payload)
 
     # send REST request
     resp = requests.post(
-        url,
-        headers=headers,
-        data=json.dumps(payload),
-        auth=CREDENTIALS,
-        verify=False).json()
+        url, headers=headers, data=json.dumps(payload), auth=CREDENTIALS, verify=False
+    ).json()
 
     return resp
 
@@ -100,23 +97,23 @@ def convert_short_iface_to_long(interface):
 
     """
     interface = interface.upper()
-    interface_type = ''
-    slot = ''
-    supported_names = ['ETHERNET', 'PORT-CHANNEL']
+    interface_type = ""
+    slot = ""
+    supported_names = ["ETHERNET", "PORT-CHANNEL"]
 
-    if 'ETHERNET' in interface or 'PORT-CHANNEL' in interface:
+    if "ETHERNET" in interface or "PORT-CHANNEL" in interface:
         long_iface_name = interface
 
     else:
-        if interface.startswith('ETH'):
-            interface_type = 'ETHERNET'
-            slot = re.split('ETH', interface)[1]
-        elif interface.startswith('ET'):
-            interface_type = 'ETHERNET'
-            slot = re.split('ET', interface)[1]
-        elif interface.startswith('PO'):
-            interface_type = 'PORT-CHANNEL'
-            slot = re.split('PO', interface)[1]
+        if interface.startswith("ETH"):
+            interface_type = "ETHERNET"
+            slot = re.split("ETH", interface)[1]
+        elif interface.startswith("ET"):
+            interface_type = "ETHERNET"
+            slot = re.split("ET", interface)[1]
+        elif interface.startswith("PO"):
+            interface_type = "PORT-CHANNEL"
+            slot = re.split("PO", interface)[1]
 
         if interface_type not in supported_names:
             long_iface_name = interface
@@ -135,46 +132,52 @@ def main():
     vpc_peers = config_file["vpc_peers"]
 
     # set up template environment
-    env = Environment(loader=FileSystemLoader('.'),
-                      trim_blocks=True,
-                      lstrip_blocks=True)
+    env = Environment(
+        loader=FileSystemLoader("."), trim_blocks=True, lstrip_blocks=True
+    )
 
     for hostname, details in inventory.items():
-        template_vars = {'mgmt_ip': details['mgmt_ip'], 'vlans': config_file["vlans"]}
+        template_vars = {"mgmt_ip": details["mgmt_ip"], "vlans": config_file["vlans"]}
         for peers in vpc_peers:
-            if peers['side_a'].upper() or peers['side_b'].upper() == hostname:
-                template_vars['domain_id'] = peers['domain_id']
-                template_vars['system_priority'] = peers['system_priority']
-                template_vars['vrf'] = peers['vrf']
-                if hostname == peers['side_a']:
-                    template_vars['role_priority'] = '2000'
-                    template_vars['peer_mgmt_ip'] = inventory[peers['side_b']]['mgmt_ip']
+            if peers["side_a"].upper() or peers["side_b"].upper() == hostname:
+                template_vars["domain_id"] = peers["domain_id"]
+                template_vars["system_priority"] = peers["system_priority"]
+                template_vars["vrf"] = peers["vrf"]
+                if hostname == peers["side_a"]:
+                    template_vars["role_priority"] = "2000"
+                    template_vars["peer_mgmt_ip"] = inventory[peers["side_b"]][
+                        "mgmt_ip"
+                    ]
                 else:
-                    template_vars['role_priority'] = '1000'
-                    template_vars['peer_mgmt_ip'] = inventory[peers['side_a']]['mgmt_ip']
+                    template_vars["role_priority"] = "1000"
+                    template_vars["peer_mgmt_ip"] = inventory[peers["side_a"]][
+                        "mgmt_ip"
+                    ]
                 break
 
         # configure interfaces
-        template_vars['interfaces'] = config_file["interfaces"][hostname]
-        for name, details in config_file["interfaces"][hostname].items():
-            if 'PORT-CHANNEL' in name.upper() or name.upper().startswith('PO'):
-                template_vars['vpc_peer_link_po_num'] = re.search(r"\d+", name).group(0)
-                if details.get('members'):
-                    template_vars['vpc_peer_link_po_members'] = []
-                    for member in details['members']:
-                        template_vars['vpc_peer_link_po_members'].append(
+        template_vars["interfaces"] = config_file["interfaces"][hostname]
+        for name, interface_details in config_file["interfaces"][hostname].items():
+            if "PORT-CHANNEL" in name.upper() or name.upper().startswith("PO"):
+                template_vars["vpc_peer_link_po_num"] = re.search(r"\d+", name).group(0)
+                if interface_details.get("members"):
+                    template_vars["vpc_peer_link_po_members"] = []
+                    for member in interface_details["members"]:
+                        template_vars["vpc_peer_link_po_members"].append(
                             convert_short_iface_to_long(member).capitalize()
                         )
 
-        template = env.get_template('config_template.j2')
+        template = env.get_template("config_template.j2")
         built_config = template.render(template_vars)
         print(built_config)
 
         # finally, let's send the config commands to the switch
-        cmds_to_send = built_config.split('\n')
-        response = nxapi_send_config_cmds(host=details['mgmt_ip'], cmds=cmds_to_send)
+        cmds_to_send = built_config.split("\n")
+        response = nxapi_send_config_cmds(host=details["mgmt_ip"], cmds=cmds_to_send)
         print(json.dumps(response, indent=4))
 
+    print("commands sent!")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
