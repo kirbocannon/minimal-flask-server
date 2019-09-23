@@ -1,3 +1,8 @@
+import os
+
+BASEDIR = os.path.dirname(os.path.realpath(__file__))
+
+
 class Config(object):
     DEBUG = False
     TESTING = False
@@ -14,3 +19,4 @@ class Production(Config):
     DEVELOPMENT = False
     DEBUG = False
     ENV = 'production'
+

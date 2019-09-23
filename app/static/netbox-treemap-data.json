@@ -1,0 +1,412 @@
+{
+  "name": "netbox",
+  "children": [
+    {
+      "name": "site",
+      "children": [
+        {
+          "name": "Barbados",
+          "children": [
+            {
+              "name": "device",
+              "children": [
+                {
+                  "name": "Rack",
+                  "size": 0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Brooklyn",
+          "children": [
+            {
+              "name": "device",
+              "children": [
+                {
+                  "name": "Rack",
+                  "size": 1
+                },
+                {
+                  "name": "Server",
+                  "size": 9
+                },
+                {
+                  "name": "Core Switch",
+                  "size": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Detroit",
+          "children": [
+            {
+              "name": "device",
+              "children": [
+                {
+                  "name": "Rack",
+                  "size": 0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Guangzhou",
+          "children": [
+            {
+              "name": "device",
+              "children": [
+                {
+                  "name": "Rack",
+                  "size": 0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Hong Kong",
+          "children": [
+            {
+              "name": "device",
+              "children": [
+                {
+                  "name": "Rack",
+                  "size": 0
+                },
+                {
+                  "name": "Router",
+                  "size": 2
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "London",
+          "children": [
+            {
+              "name": "device",
+              "children": [
+                {
+                  "name": "Rack",
+                  "size": 0
+                },
+                {
+                  "name": "Core Switch",
+                  "size": 8
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Manhattan",
+          "children": [
+            {
+              "name": "device",
+              "children": [
+                {
+                  "name": "Rack",
+                  "size": 0
+                },
+                {
+                  "name": "Core Switch",
+                  "size": 20
+                },
+                {
+                  "name": "Router",
+                  "size": 2
+                },
+                {
+                  "name": "Server",
+                  "size": 7
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Nice",
+          "children": [
+            {
+              "name": "device",
+              "children": [
+                {
+                  "name": "Rack",
+                  "size": 0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Paris",
+          "children": [
+            {
+              "name": "device",
+              "children": [
+                {
+                  "name": "Rack",
+                  "size": 0
+                },
+                {
+                  "name": "Access Switch",
+                  "size": 28
+                },
+                {
+                  "name": "Core Switch",
+                  "size": 4
+                },
+                {
+                  "name": "Server",
+                  "size": 50
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Portland",
+          "children": [
+            {
+              "name": "device",
+              "children": [
+                {
+                  "name": "Rack",
+                  "size": 0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Portugal",
+          "children": [
+            {
+              "name": "device",
+              "children": [
+                {
+                  "name": "Rack",
+                  "size": 0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Queens",
+          "children": [
+            {
+              "name": "device",
+              "children": [
+                {
+                  "name": "Rack",
+                  "size": 0
+                },
+                {
+                  "name": "Access Switch",
+                  "size": 32
+                },
+                {
+                  "name": "Core Switch",
+                  "size": 4
+                },
+                {
+                  "name": "Server",
+                  "size": 60
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Rio",
+          "children": [
+            {
+              "name": "device",
+              "children": [
+                {
+                  "name": "Rack",
+                  "size": 0
+                },
+                {
+                  "name": "Core Switch",
+                  "size": 4
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Saipan",
+          "children": [
+            {
+              "name": "device",
+              "children": [
+                {
+                  "name": "Rack",
+                  "size": 0
+                },
+                {
+                  "name": "Server",
+                  "size": 12
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "San Diego",
+          "children": [
+            {
+              "name": "device",
+              "children": [
+                {
+                  "name": "Rack",
+                  "size": 0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "San Francisco",
+          "children": [
+            {
+              "name": "device",
+              "children": [
+                {
+                  "name": "Rack",
+                  "size": 0
+                },
+                {
+                  "name": "Server",
+                  "size": 10
+                },
+                {
+                  "name": "Core Switch",
+                  "size": 4
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Shanghai",
+          "children": [
+            {
+              "name": "device",
+              "children": [
+                {
+                  "name": "Rack",
+                  "size": 0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Sydney",
+          "children": [
+            {
+              "name": "device",
+              "children": [
+                {
+                  "name": "Rack",
+                  "size": 0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Tahiti",
+          "children": [
+            {
+              "name": "device",
+              "children": [
+                {
+                  "name": "Rack",
+                  "size": 0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Tokyo",
+          "children": [
+            {
+              "name": "device",
+              "children": [
+                {
+                  "name": "Rack",
+                  "size": 0
+                },
+                {
+                  "name": "Access Switch",
+                  "size": 32
+                },
+                {
+                  "name": "Core Switch",
+                  "size": 4
+                },
+                {
+                  "name": "Server",
+                  "size": 23
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Toronto",
+          "children": [
+            {
+              "name": "device",
+              "children": [
+                {
+                  "name": "Rack",
+                  "size": 0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Toulouse",
+          "children": [
+            {
+              "name": "device",
+              "children": [
+                {
+                  "name": "Rack",
+                  "size": 0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Virginia Beach",
+          "children": [
+            {
+              "name": "device",
+              "children": [
+                {
+                  "name": "Rack",
+                  "size": 0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
